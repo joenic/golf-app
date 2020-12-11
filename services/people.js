@@ -1,3 +1,3 @@
 import axios from 'axios'
 
-export const getPeople = () => axios.get('https://localhost:5000/api/people').then(res => res.data)
+export const getPeople = () => axios.get('http://localhost:5000/api/people').then(res => res.data)
