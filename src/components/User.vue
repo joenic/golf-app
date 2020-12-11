@@ -1,24 +1,15 @@
 <template>
 
   <div clas="container">
-      <h1>Get User</h1>
+       <h1>People</h1>
+    <ul>
+      <li v-for="p in people" :key="p._id">
+        <a :href="`/people/${p._id}`">
+        {{ p.firstname }} {{ p.lastname }}
+        </a>
+      </li>
+    </ul>
 
-      <table class="table table-striped table-borderes">
-      <thead>
-        <tr>
-          <th class="center">First Name</th>
-          <th class="center">Last Name</th>
-          <th>Email</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="user_alias in User" :key="user_alias">
-          <td class="text-left"> {{ user_alias.first_name}}</td>
-          <td class="text-left"> {{ user_alias.last_name}}</td>
-          <td class="text-left"> {{ user_alias.email}}</td>
-        </tr>
-      </tbody>
-    </table>
 <router-link to="/">
     <button class="brn btn-large btn-block btn-success full-width"> Add User </button>
 </router-link>
@@ -29,23 +20,17 @@
 /* eslint-disable */
 import axios from 'axios';
 export default {
-    name:'users',
-    data() {
-        return {
-            User: [],
-        }
-    },
-        mounted() {
-        axios.get('http://localhost:5000/people')
-            .then((response) => {
-                console.log(response.data);
-                this.User = response.data;
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    },
-}
+    name:'user',
+    data: () => ({
+      people: [],
+    }),
+    
+    mounted() {
+      axios.get(`${process.env.VUE_APP_API_URL}/people`)
+            .then(res => res.data).then(people => {
+      this.people = people._items
+    })
+}}
 </script>
 
 <style>
