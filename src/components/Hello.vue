@@ -47,7 +47,7 @@ export default {
         email: this.User.email
       }
       console.log(newUser);
-      axios.post('http://localhost:3000/users', newUser)
+      axios.post('http://localhost:5000/people', newUser)
         .then((response) => {
           console.log(response);
         })
