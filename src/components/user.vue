@@ -36,7 +36,7 @@ export default {
         }
     },
         mounted() {
-        axios.get('http://localhost:3000/users')
+        axios.get('http://localhost:5000/people')
             .then((response) => {
                 console.log(response.data);
                 this.User = response.data;
