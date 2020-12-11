@@ -7,11 +7,11 @@
         <h4> Add User</h4>
         <div class="form-group">
           <label class="pull-left"> First Name </label>
-          <input type="text" class="form-control" placeholder="First Name" v-model="User.first_name">
+          <input type="text" class="form-control" placeholder="First Name" v-model="User.firstname">
         </div>
         <div class="form-group">
           <label class="pull-left"> Last Name </label>
-          <input type="text" class="form-control" placeholder="Last Namen" v-model="User.last_name">
+          <input type="text" class="form-control" placeholder="Last Namen" v-model="User.lastname">
         </div>
         <!-- <div class="form-group">
           <label class="pull-left"> Email </label>
@@ -37,17 +37,17 @@ export default {
   data() {
     return {
       msg: 'Welcome to Your Vue.js App',
-      User: { first_name: '', last_name: '', email: '' },
+      User: { firstname: '', lastname: ''},
     }
   }, methods: {
     addToAPI() {
       let newUser = {
-        first_name: this.User.first_name,
-        last_name: this.User.last_name,
+        firstname: this.User.firstname,
+        lastname: this.User.lastname,
         // email: this.User.email
       }
       console.log(newUser);
-      axios.post('http://localhost:5000/api/people', newUser)
+      axios.post(`${process.env.VUE_APP_API_URL}/people`, newUser)
         .then((response) => {
           console.log(response);
         })

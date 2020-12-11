@@ -26,7 +26,7 @@ export default {
     }),
     
     mounted() {
-      axios.get('http://localhost:5000/api/people')
+      axios.get(`${process.env.VUE_APP_API_URL}/people`)
             .then(res => res.data).then(people => {
       this.people = people._items
     })
