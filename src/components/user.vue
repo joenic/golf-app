@@ -8,14 +8,14 @@
         <tr>
           <th class="center">First Name</th>
           <th class="center">Last Name</th>
-          <th>Email</th>
+          <!-- <th>Email</th> -->
         </tr>
       </thead>
       <tbody>
         <tr v-for="user_alias in User" :key="user_alias">
           <td class="text-left"> {{ user_alias.first_name}}</td>
           <td class="text-left"> {{ user_alias.last_name}}</td>
-          <td class="text-left"> {{ user_alias.email}}</td>
+          <!-- <td class="text-left"> {{ user_alias.email}}</td> -->
         </tr>
       </tbody>
     </table>
