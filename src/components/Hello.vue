@@ -13,10 +13,10 @@
           <label class="pull-left"> Last Name </label>
           <input type="text" class="form-control" placeholder="Last Namen" v-model="User.last_name">
         </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label class="pull-left"> Email </label>
           <input type="text" class="form-control" placeholder="Email " v-model="User.email">
-        </div>
+        </div> -->
       </div>
 
   <router-link to="/users">
@@ -44,7 +44,7 @@ export default {
       let newUser = {
         first_name: this.User.first_name,
         last_name: this.User.last_name,
-        email: this.User.email
+        // email: this.User.email
       }
       console.log(newUser);
       axios.post('http://localhost:5000/people', newUser)
