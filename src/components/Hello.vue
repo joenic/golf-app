@@ -1,17 +1,19 @@
 <template>
+  <v-card
+    class="mx-auto"
+    max-width="500"
+  >
   <div class="container">
 
     <form>
 
       <div class="well">
-        <h4> Add User</h4>
+        <h1 class="pa-3"> Login</h1>
         <div class="form-group">
-          <label class="pull-left"> First Name </label>
           <input type="text" class="form-control" placeholder="First Name" v-model="User.firstname">
         </div>
         <div class="form-group">
-          <label class="pull-left"> Last Name </label>
-          <input type="text" class="form-control" placeholder="Last Namen" v-model="User.lastname">
+          <input type="text" class="form-control" placeholder="Last Name" v-model="User.lastname">
         </div>
         <!-- <div class="form-group">
           <label class="pull-left"> Email </label>
@@ -20,13 +22,14 @@
       </div>
 
   <router-link to="/users">
-      <button type="submit" class="btn btn-large btn-block btn-primary full-width" @click="addToAPI">Submit</button>
+      <button type="submit" class="btn btn-large btn-block btn-primary full-width pa-2" @click="addToAPI">Submit</button>
 
   </router-link>
-      <button class="btn btn-large btn-block btn-success full-width">Go User</button>
+      <!-- <button class="btn btn-large btn-block btn-success full-width">Go User</button> -->
     </form>
 
   </div>
+  </v-card>
 </template>
 
 <script>
