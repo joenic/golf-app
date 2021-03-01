@@ -70,7 +70,7 @@ export default {
     drawer: null,
     items: [
       { title: 'Login', icon: 'mdi-view-dashboard', to: '/' },
-      { title: 'Hole Preview', icon: 'mdi-golf', to: '/users' },
+      { title: 'Hole Preview', icon: 'mdi-golf', to: '/gps' },
       { title: 'Scorecard', icon: 'mdi-lead-pencil', to: '/scorecard' },
       { title: 'Leaderboard', icon: 'mdi-trophy', to: '' }
     ]
