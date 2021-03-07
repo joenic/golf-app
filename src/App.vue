@@ -56,6 +56,8 @@
 
       <v-spacer></v-spacer>
 
+      <v-app-bar-title >Welcome: {{ user.name }}</v-app-bar-title>
+
     </v-app-bar>
 
     <v-main>
@@ -65,6 +67,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   data: () => ({
     drawer: null,
@@ -74,6 +78,9 @@ export default {
       { title: 'Scorecard', icon: 'mdi-lead-pencil', to: '/scorecard' },
       { title: 'Leaderboard', icon: 'mdi-trophy', to: '' }
     ]
+  }),
+  computed: mapState({
+    user: 'user'
   })
 }
 </script>
