@@ -122,72 +122,72 @@ export default {
         {
           name: '1',
           Par: 4,
-          Score: 6.0,
-          Putt: 24,
+          Score: 0,
+          Putt: 0,
           GIR: false,
           FH: false
         },
         {
           name: '2',
           Par: 4,
-          Score: 6.0,
-          Putt: 24,
+          Score: 0,
+          Putt: 0,
           GIR: false,
           FH: false
         },
         {
           name: '3',
           Par: 3,
-          Score: 6.0,
-          Putt: 24,
+          Score: 0,
+          Putt: 0,
           GIR: false,
           FH: false
         },
         {
           name: '4',
           Par: 4,
-          Score: 6.0,
-          Putt: 24,
+          Score: 0,
+          Putt: 0,
           GIR: false,
           FH: false
         },
         {
           name: '5',
           Par: 4,
-          Score: 6.0,
-          Putt: 24,
+          Score: 0,
+          Putt: 0,
           GIR: false,
           FH: false
         },
         {
           name: '6',
           Par: 3,
-          Score: 6.0,
-          Putt: 24,
+          Score: 0,
+          Putt: 0,
           GIR: false,
           FH: false
         },
         {
           name: '7',
           Par: 5,
-          Score: 6.0,
-          Putt: 24,
+          Score: 0,
+          Putt: 0,
           GIR: false,
           FH: false
         },
         {
           name: '8',
           Par: 3,
-          Score: 6.0,
-          Putt: 24,
+          Score: 0,
+          Putt: 0,
           GIR: false,
           FH: false
         },
         {
           name: '9',
           Par: 4,
-          Score: 6.0,
-          Putt: 24,
+          Score: 0,
+          Putt: 0,
           GIR: false,
           FH: false
         }
