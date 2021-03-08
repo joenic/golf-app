@@ -2,14 +2,15 @@
   <v-app id="inspire">
     <v-navigation-drawer
       v-model="drawer"
+      v-if="['Login'].indexOf($route.name) === -1"
       app>
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="title">
-            Golfing App
+            Welcome {{ user.name }}
           </v-list-item-title>
           <v-list-item-subtitle>
-            Created to compete against friends
+            Enjoy a game with your friends
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -56,8 +57,6 @@
 
       <v-spacer></v-spacer>
 
-      <v-app-bar-title >Welcome: {{ user.name }}</v-app-bar-title>
-
     </v-app-bar>
 
     <v-main>
@@ -73,14 +72,17 @@ export default {
   data: () => ({
     drawer: null,
     items: [
-      { title: 'Login', icon: 'mdi-view-dashboard', to: '/' },
-      { title: 'Hole Preview', icon: 'mdi-golf', to: '/gps' },
+      { title: 'Sign Out', icon: 'mdi-view-dashboard', to: '/' },
+      { title: 'Start Game', icon: 'mdi-golf', to: '/hole' },
       { title: 'Scorecard', icon: 'mdi-lead-pencil', to: '/scorecard' },
       { title: 'Leaderboard', icon: 'mdi-trophy', to: '' }
     ]
   }),
   computed: mapState({
     user: 'user'
-  })
+  }),
+  routes: [
+    { path: '/' }
+  ]
 }
 </script>

@@ -5,27 +5,14 @@
         <v-form>
           <v-text-field v-model="User.firstname" placeholder="First Name" class="form-control pa-2" type="text" prepend-inner-icon="mdi-account-circle"></v-text-field>
           <v-text-field v-model="User.lastname" placeholder="Password" class="form-control pa-2" type="text" prepend-inner-icon="mdi-lock"></v-text-field>
-          <!-- <div class="well">
-            <div class="form-group">
-              <input type="text" class="form-control" placeholder="First Name" v-model="User.firstname">
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control" placeholder="Last Name" v-model="User.lastname">
-            </div>
-            <div class="form-group">
-              <label class="pull-left"> Email </label>
-              <input type="text" class="form-control" placeholder="Email " v-model="User.email">
-            </div>
-          </div> -->
 
-          <router-link to="/users">
+          <router-link to="/gps">
             <v-btn
               large
               color="primary"
               block
               @click="addtoAPI">Submit</v-btn>
           </router-link>
-          <!-- <button class="btn btn-large btn-block btn-success full-width">Go User</button> -->
         </v-form>
     </v-card>
   </div>
@@ -35,7 +22,7 @@
 /* eslint-disable */
 import axios from 'axios';
 export default {
-  name: 'hello',
+  name: 'Login',
   data() {
     return {
       msg: 'Welcome to Your Vue.js App',

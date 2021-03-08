@@ -1,18 +1,25 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
+import Login from '@/components/Login'
 import User from '@/components/User'
 import Scorecard from '@/components/Scorecard'
-import GPS from '@/components/GPS'
+import HolePage from '@/components/HolePage'
+import Main from '@/components/Main'
 
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
-      name: 'Hello',
-      component: Hello
+      name: 'Login',
+      component: Login
+    },
+    {
+      path: '/main',
+      name: 'Main',
+      component: Main
     },
     {
       path: '/users',
@@ -25,9 +32,9 @@ export default new Router({
       component: Scorecard
     },
     {
-      path: '/GPS',
-      name: 'gps',
-      component: GPS
+      path: '/hole',
+      name: 'HolePage',
+      component: HolePage
     }
   ]
 })

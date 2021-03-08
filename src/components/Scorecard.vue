@@ -97,6 +97,7 @@
 </template>
 
 <script>
+
 export default {
   data () {
     return {
@@ -112,82 +113,18 @@ export default {
           sortable: false,
           value: 'name'
         },
-        { text: 'Par', value: 'Par' },
-        { text: 'Score', value: 'Score' },
-        { text: 'Putts', value: 'Putt' },
+        { text: 'Par', value: 'par' },
+        { text: 'Score', value: 'shot' },
+        { text: 'Putts', value: 'putt' },
         { text: 'Green in Reg', value: 'GIR' },
         { text: 'Fairway Hit', value: 'FH' }
       ],
       Hole: [
         {
-          name: '1',
-          Par: 4,
-          Score: 0,
-          Putt: 0,
-          GIR: false,
-          FH: false
-        },
-        {
-          name: '2',
-          Par: 4,
-          Score: 0,
-          Putt: 0,
-          GIR: false,
-          FH: false
-        },
-        {
-          name: '3',
-          Par: 3,
-          Score: 0,
-          Putt: 0,
-          GIR: false,
-          FH: false
-        },
-        {
-          name: '4',
-          Par: 4,
-          Score: 0,
-          Putt: 0,
-          GIR: false,
-          FH: false
-        },
-        {
-          name: '5',
-          Par: 4,
-          Score: 0,
-          Putt: 0,
-          GIR: false,
-          FH: false
-        },
-        {
-          name: '6',
-          Par: 3,
-          Score: 0,
-          Putt: 0,
-          GIR: false,
-          FH: false
-        },
-        {
-          name: '7',
-          Par: 5,
-          Score: 0,
-          Putt: 0,
-          GIR: false,
-          FH: false
-        },
-        {
-          name: '8',
-          Par: 3,
-          Score: 0,
-          Putt: 0,
-          GIR: false,
-          FH: false
-        },
-        {
-          name: '9',
-          Par: 4,
-          Score: 0,
-          Putt: 0,
+          name: '',
+          par: 0,
+          shot: 0,
+          putt: 0,
           GIR: false,
           FH: false
         }
