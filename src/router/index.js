@@ -5,6 +5,7 @@ import User from '@/components/User'
 import Scorecard from '@/components/Scorecard'
 import HolePage from '@/components/HolePage'
 import Main from '@/components/Main'
+import ChatPage from '@/components/ChatPage'
 
 Vue.use(Router)
 
@@ -35,6 +36,11 @@ export default new Router({
       path: '/hole',
       name: 'HolePage',
       component: HolePage
+    },
+    {
+      path: '/chat',
+      name: 'ChatPage',
+      component: ChatPage
     }
   ]
 })
