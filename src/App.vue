@@ -52,14 +52,16 @@
 
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-app-bar-title >SubPar</v-app-bar-title>
+      <!-- <v-app-bar-title>SubPar</v-app-bar-title> -->
 
       <v-spacer></v-spacer>
 
     </v-app-bar>
 
     <v-main>
-      <router-view></router-view>
+      <v-main>
+        <router-view></router-view>
+      </v-main>
     </v-main>
   </v-app>
 </template>
@@ -72,7 +74,8 @@ export default {
       { title: 'Login', icon: 'mdi-view-dashboard', to: '/' },
       { title: 'Hole Preview', icon: 'mdi-golf', to: '/gps' },
       { title: 'Scorecard', icon: 'mdi-lead-pencil', to: '/scorecard' },
-      { title: 'Leaderboard', icon: 'mdi-trophy', to: '' }
+      { title: 'Leaderboard', icon: 'mdi-trophy', to: '' },
+      { title: 'Chat', icon: 'mdi-chat', to: '/chat' }
     ]
   })
 }

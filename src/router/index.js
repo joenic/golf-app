@@ -4,6 +4,7 @@ import Hello from '@/components/Hello'
 import User from '@/components/User'
 import Scorecard from '@/components/Scorecard'
 import GPS from '@/components/GPS'
+import ChatPage from '@/components/ChatPage'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/GPS',
       name: 'gps',
       component: GPS
+    },
+    {
+      path: '/Chat',
+      name: 'Chat',
+      component: ChatPage
     }
   ]
 })
