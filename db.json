@@ -1,0 +1,31 @@
+{
+  "users": [
+    {
+      "name": "Joe",
+      "password": "1234",
+      "games": [
+        {
+          "courseName": "Lake View",
+          "holes": [
+            {
+              "shots": [
+                {
+                  "time": 0,
+                  "position": {
+                    "lat": "",
+                    "lng": ""
+                  },
+                  "club": "9 iron"
+                }
+              ],
+              "number": 1,
+              "yards": 195,
+              "par": 4,
+              "tee": "blue"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

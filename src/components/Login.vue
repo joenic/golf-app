@@ -3,15 +3,18 @@
     <v-card>
       <v-card-title>User Login</v-card-title>
         <v-form>
-          <v-text-field v-model="User.firstname" placeholder="First Name" class="form-control pa-2" type="text" prepend-inner-icon="mdi-account-circle"></v-text-field>
-          <v-text-field v-model="User.lastname" placeholder="Password" class="form-control pa-2" type="text" prepend-inner-icon="mdi-lock"></v-text-field>
+          <v-text-field v-model="user.name" placeholder="First Name" class="form-control pa-2" type="text" prepend-inner-icon="mdi-account-circle"></v-text-field>
+          <v-text-field v-model="user.password" placeholder="Password" class="form-control pa-2" type="text" prepend-inner-icon="mdi-lock"></v-text-field>
+          <v-text-field v-model="course.courseName" placeholder="Course Name" class="form-control pa-2" type="text" prepend-inner-icon="mdi-golf-tee"></v-text-field>
 
-          <router-link to="/gps">
+          <router-link to="/">
             <v-btn
               large
               color="primary"
               block
-              @click="addtoAPI">Submit</v-btn>
+              type="submit"
+              @click="NEW_USER"
+              >Submit</v-btn>
           </router-link>
         </v-form>
     </v-card>
@@ -19,30 +22,31 @@
 </template>
 
 <script>
-/* eslint-disable */
-import axios from 'axios';
 export default {
-  name: 'Login',
-  data() {
+  // This is the local data for the component. The user key is calling a method newUser
+  data () {
     return {
-      msg: 'Welcome to Your Vue.js App',
-      User: { firstname: '', lastname: ''},
+      user: this.newUser(),
+      course: this.newCourse()
     }
-  }, methods: {
-    addToAPI() {
-      let newUser = {
-        firstname: this.User.firstname,
-        lastname: this.User.lastname,
-        // email: this.User.email
+  },
+  methods: {
+    // NEW_USER method dispatches the local user data to the VUEX store that can then be pushed to the array and then further to the api end point
+    NEW_USER () {
+      this.$store.dispatch('NEW_USER', this.user)
+      this.$store.dispatch('NEW_COURSE', this.course)
+    },
+    // newUser returns empty strings that will be filled by the inputs in the template above.
+    newUser () {
+      return {
+        name: '',
+        password: ''
       }
-      console.log(newUser);
-      axios.post(`${process.env.VUE_APP_API_URL}/people`, newUser)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    },
+    newCourse () {
+      return {
+        courseName: ''
+      }
     }
   }
 }

@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/Login'
-import User from '@/components/User'
 import Scorecard from '@/components/Scorecard'
 import HolePage from '@/components/HolePage'
-import Main from '@/components/Main'
 import ChatPage from '@/components/ChatPage'
+import Users from '@/components/Users'
+import Games from '@/components/GamesPage'
 
 Vue.use(Router)
 
@@ -18,14 +18,14 @@ export default new Router({
       component: Login
     },
     {
-      path: '/main',
-      name: 'Main',
-      component: Main
+      path: '/games',
+      name: 'games',
+      component: Games
     },
     {
       path: '/users',
-      name: 'users',
-      component: User
+      name: 'Users',
+      component: Users
     },
     {
       path: '/scorecard',

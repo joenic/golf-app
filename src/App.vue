@@ -7,7 +7,7 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="title">
-            Welcome {{ user.name }}
+            Welcome {{ user.username }}
           </v-list-item-title>
           <v-list-item-subtitle>
             Enjoy a game with your friends
@@ -75,9 +75,10 @@ export default {
     drawer: null,
     items: [
       { title: 'Sign Out', icon: 'mdi-view-dashboard', to: '/' },
+      { title: 'My Games', icon: 'mdi-golf-tee', to: '/games' },
       { title: 'Start Game', icon: 'mdi-golf', to: '/hole' },
       { title: 'Scorecard', icon: 'mdi-lead-pencil', to: '/scorecard' },
-      { title: 'Leaderboard', icon: 'mdi-trophy', to: '' },
+      // { title: 'Leaderboard', icon: 'mdi-trophy', to: '' },
       { title: 'Chat', icon: 'mdi-chat', to: '/chat' }
     ]
   }),

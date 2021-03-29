@@ -1,29 +1,25 @@
 <template>
   <div>
       <v-card
-        class="mx-auto"
-        max-width="300">
-        <div style="pa-3">
-          <h1>Your Coordinates:</h1>
-          <p>{{ myCoordinates.lat }} Latitude, {{ myCoordinates.lng }} Longitude</p>
-        </div>
+        class="mx-auto pa-8"
+        max-width="570">
+        <!-- Basic Form -->
         <div>
-          <h1>Map Coordinates:</h1>
-          <p>{{ mapCoordinates.lat }} Latitude, {{ mapCoordinates.lng }} Longitude</p>
-          <tr v-for="(m, index) in markers" :key="index">
-            <td>
-              <input type="number" v-model.number="m.position.lat">
-            </td>
-            <td>
-              <input type="number" v-model.number="m.position.lng">
-            </td>
-          </tr>
+          <v-form>
+            <!-- <h1> {{ user.username }} </h1> -->
+            <v-text-field v-model="hole.number" placeholder="Hole Number" type="number"/>
+            <v-text-field v-model="hole.yards" placeholder="Yards" type="number"/>
+            <v-text-field v-model="hole.par" placeholder="Par" type="number"/>
+            <v-text-field v-model="hole.tee" placeholder="Tee (Black, Blue, White, Yellow, Red)"/>
+          </v-form>
         </div>
+
+        <!-- Google Maps Component -->
           <gmap-map
             :center="myCoordinates"
-            :zoom="17"
-            map-type-id="terrain"
-            style="width: 300px; height: 500px"
+            :zoom="18"
+            map-type-id="satellite"
+            style="width: 500px; height: 500px"
             ref="mapRef"
           >
             <gmap-marker
@@ -32,73 +28,53 @@
               :position = 'm.position'
               :clickable = 'true'
               :draggable = 'true'
-              @click = 'center = m.postion'
+              @click = 'center = m.position'
             ></gmap-marker>
 
-            <gmap-polygon :paths="paths">
-
-            </gmap-polygon>
+            <gmap-polygon :paths="hole.shots.map(h => h.position)"></gmap-polygon>
           </gmap-map>
-        <v-btn large color="green" @click="drawMarkers">Tee Off</v-btn>
-        <v-btn large color="secondary" @click="drawDirection">Shot</v-btn>
-        <v-btn large color="red" @click="clearMap">Holed</v-btn>
-        <v-btn large color="red" @click="finishRound">Finish Round</v-btn>
 
+        <v-row
+        align="center"
+        justify="space-around">
+          <v-btn large color="green" @click="createNewHole" class="pa-8">Tee Off</v-btn>
+          <v-btn large color="secondary" @click="drawDirection"  class="pa-8">Shot</v-btn>
+          <v-btn large color="yellow" @click="clearMap"  class="pa-8">Holed</v-btn>
+          <v-btn large color="red" @click="finishRound"  class="pa-8">Finish Round</v-btn>
+        </v-row>
         <!-- Display's data from Game -->
-        <p> Shot: {{shot}} </p>
+        <!-- <p> Shot: {{shot}} </p>
         <p> Hole: {{theHole}} </p>
-        <p> Game: {{game}} </p>
+        <p> Game: {{game}} </p> -->
       </v-card>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+// const test = { lat: 38.42345466879392, lng: -78.87565709341992 }
+// const test2 = { lat: 38.4242274, lng: -78.872773 }
 
 export default {
-  props: {
-    hole: {
-      type: Object,
-      default: () => ({
-        shots: [
-          {
-            time: new Date(),
-            position:
-              {
-                lat: 0,
-                lng: 0
-              },
-            club: ''
-          }
-        ],
-        number: 0,
-        yards: 0,
-        par: 0,
-        tee: ''
-      })
-    }
-  },
   data () {
     return {
-      game: 0,
-      theHole: this.hole,
-      shot: 0,
       map: null,
       markers: [],
       paths: [],
       myCoordinates: {}
     }
   },
-  watch: {
-    theHole: {
-      deep: true,
-      handler (newHole, oldHole) {
-        // Check to see if we need to draw a new polyline
-        if (newHole.shots.length - this.paths.length === 2) {
-          this.paths.push(newHole.shots[newHole.shots.length - 1].position)
-        }
-      }
-    }
-  },
+  // watch: {
+  //   theHole: {
+  //     deep: true,
+  //     handler (newHole, oldHole) {
+  //       // Check to see if we need to draw a new polyline
+  //       if (newHole.shots.length - this.paths.length === 2) {
+  //         this.paths.push(newHole.shots[newHole.shots.length - 1].position)
+  //       }
+  //     }
+  //   }
+  // },
   methods: {
     createNewHole () {
       const position = {
@@ -106,11 +82,27 @@ export default {
         lng: this.myCoordinates.lng
       }
       this.theHole.shots.push({ time: new Date(), position, club: '' })
-      this.paths.push(position)
+      this.paths.push({
+        position: {
+          lat: this.myCoordinates.lat,
+          lng: this.myCoordinates.lng
+        }
+      })
+      this.markers.push({
+        position: {
+          lat: this.myCoordinates.lat,
+          lng: this.myCoordinates.lng
+        }
+      })
     },
     drawDirection () {
-      this.paths = []
       this.markers.push({
+        position: {
+          lat: this.myCoordinates.lat,
+          lng: this.myCoordinates.lng
+        }
+      })
+      this.paths.push({
         position: {
           lat: this.myCoordinates.lat,
           lng: this.myCoordinates.lng
@@ -121,16 +113,15 @@ export default {
       this.paths = []
       this.markers = []
       this.shot = 0
-      this.hole++
     },
     finishRound () {
       this.game++
-      this.hole = 0
     }
   },
   created () {
+    this.$store.dispatch('GET_USER')
     // get user's coords
-    this.$getLocation({
+    this.$watchLocation({
       enableHighAccuracy: true
     })
       .then(coordinates => {
@@ -153,7 +144,11 @@ export default {
         lat: this.map.getCenter().lat().toFixed(4),
         lng: this.map.getCenter().lng().toFixed(4)
       }
-    }
+    },
+    ...mapGetters({
+      // create a getter to find the current game and current hole
+      hole: 'hole'
+    })
   }
 }
 </script>
