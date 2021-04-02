@@ -2,16 +2,16 @@
   <v-main>
     <v-container fluid fill-height>
       <v-layout align center justify-center>
-        <v-flex xs12 sm12 md4>
+        <v-flex sm12 sm15 md14>
           <v-card class="elevation-14" color="primary lighten-4">
             <v-toolbar dark color="primary darken-1">
-              <v-toolbar-title>Chat {{top}}</v-toolbar-title>
+              <v-toolbar-title>Chat <!--- {{top}} ---></v-toolbar-title>
             </v-toolbar>
             <v-card-text>
               <v-list
                 id="messages"
                 ref="messages"
-                style="height: 400px; overflow-y: scroll"
+                style="height: 400px; width: 875px; overflow-y: scroll"
                 @newmessage="$refs.messages.$el.scrollTop=$refs.messages.$el.offsetHeight"
               >
                 <v-list-item v-for="message in messages" :key="message._id"
@@ -38,9 +38,9 @@
             @click:prepend="changeIcon"
             @click:clear="clearMessage"
           />
-          <v-btn
+          <!-- <v-btn
             @click="sendMessage"
-          />
+          /> -->
 
           </v-card-actions>
           </v-card>
@@ -84,14 +84,14 @@ export default {
   mounted () {
     this.api.service('messages').find({
       query: {
-        $limit: 20,
+        $limit: 10,
         $sort: {
           createdAt: -1
         }
       }
     }).then(res => {
       this.total = res.total
-      this.retrieved = 20
+      this.retrieved = 10
       this.messages = res.data
     }).then(() => {
       const list = this.$refs.messages.$el
@@ -131,10 +131,10 @@ export default {
       if (e.target.scrollTop === 0) {
         const list = this.$refs.messages.$el
         const height = list.scrollHeight
-        this.skip += 20
+        this.skip += 10
         // console.log(this.skip, this.retrieved)
         if (this.retrieved < this.total) {
-          this.api.service('messages').find({ query: { $limit: 20, $sort: { createdAt: -1 }, $skip: this.skip } }).then(res => {
+          this.api.service('messages').find({ query: { $limit: 10, $sort: { createdAt: -1 }, $skip: this.skip } }).then(res => {
             // console.log(res)
             list.scrollTop = height
             this.retrieved += res.data.length
