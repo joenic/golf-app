@@ -1,34 +1,38 @@
 <template>
   <div>
-    <v-row>
-      <v-col col="2">
-        <strong>Course Name: </strong>
-      </v-col>
-      <v-col col="10">
-        {{ game.courseName }}
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col col="2">
-        <strong>Tee Time: </strong>
-      </v-col>
-      <v-col col="10">
-        {{ format(new Date(game.teeTime), "d MMM, y 'at' h:mm a") }}
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-form>
-        <v-text-field v-model="game.frontNine" placeholder="Front Nine"></v-text-field>
-        <v-text-field v-model="game.backNine" placeholder="Back Nine"></v-text-field>
-      </v-form>
-      <v-btn
-        large
-        color="Orange"
-        block
-        type="submit"
-        @click="NEW_NINE"
-        >Play!</v-btn>
-    </v-row>
+    <v-container fluid fill-height>
+      <v-layout align center justify-center>
+        <v-flex sm12 sm15 md14>
+          <v-card class="elevation-14" color="primary lighten-4">
+            <v-toolbar dark color="primary darken-1">
+              <v-toolbar-title>
+                <strong>Course Name: </strong>
+                {{ game.courseName }}
+                <v-spacer />
+                <strong>Tee Time: </strong>
+                {{ format(new Date(game.teeTime), "d MMM, y 'at' h:mm a") }}
+              </v-toolbar-title>
+            </v-toolbar>
+
+            <v-card-text>
+              <v-row>
+                <v-form>
+                  <v-text-field v-model="game.frontNine" placeholder="Front Nine"></v-text-field>
+                  <v-text-field v-model="game.backNine" placeholder="Back Nine"></v-text-field>
+                </v-form>
+                <v-btn
+                  large
+                  color="primary darken-1"
+                  block
+                  type="submit"
+                  @click="NEW_NINE"
+                  >Tee Off!</v-btn>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </div>
 </template>
 

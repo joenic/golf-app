@@ -1,29 +1,43 @@
 <template>
   <div>
-    <v-card>
-      <h1 style="pa-2">My Games</h1>
-      <v-list>
-        <v-list-item v-for="game in games" :key="game._id">
-          {{game.courseName}}
-          {{format(new Date(game.createdAt), 'MMM do, yyyy')}}
-        </v-list-item>
-      </v-list>
-    </v-card>
-    <v-card>
-      <h1>Start Game</h1>
-      <v-text-field v-model="courseName" placeholder="Course Name"></v-text-field>
-       <date-time-picker
-        v-model="teeTime"
-        label="Tee Time"
-      />
-            <v-btn
-              large
-              color="Orange"
-              block
-              type="submit"
-              @click="NEW_GAME"
-              >Play!</v-btn>
-    </v-card>
+    <v-container fluid fill-height>
+      <v-layout align center justify-center>
+        <v-flex sm12 sm15 md14>
+          <v-card class="elevation-14" color="primary lighten-4">
+            <v-toolbar dark color="primary darken-1">
+              <v-toolbar-title>My Games</v-toolbar-title>
+            </v-toolbar>
+            <v-list>
+              <v-list-item v-for="game in games" :key="game._id">
+                <strong>{{game.courseName}}</strong>
+                <v-spacer />
+                {{format(new Date(game.createdAt), 'MMM do, yyyy')}}
+              </v-list-item>
+            </v-list>
+          </v-card>
+          <v-card class="elevation-14" color="primary lighten-4">
+            <v-toolbar dark color="primary darken-1">
+              <v-toolbar-title>Start Game</v-toolbar-title>
+            </v-toolbar>
+            <v-text-field
+              class="pa-2 ma-auto"
+              v-model="courseName"
+              placeholder="Course Name" />
+            <date-time-picker
+              v-model="teeTime"
+              label="Tee Time"
+            />
+                  <v-btn
+                    large
+                    color="primary darken-1"
+                    block
+                    type="submit"
+                    @click="NEW_GAME"
+                    >Play!</v-btn>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </div>
 </template>
 

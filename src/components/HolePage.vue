@@ -1,49 +1,71 @@
 <template>
   <div>
-      <v-card
-        class="mx-auto pa-8"
-        max-width="570">
-        <!-- Basic Form -->
-        <div>
-          <v-form>
-            <v-select v-model="newHole.number" :items="number" label="Hole Number" type="number"/>
-            <v-text-field v-model="newHole.yards" label="Yards" type="number"/>
-            <v-select v-model="newHole.par" :items="par" label="Par" type="number"/>
-            <v-select v-model="newHole.tee" :items="tee" label="Tee (Black, Blue, White, Yellow, Red)"/>
-          </v-form>
-        </div>
+    <v-container fluid fill-height>
+      <v-layout align center justify-center>
+        <v-flex sm12 sm15 md14>
+          <v-card
+            class="elevation-14 pa-2" color="primary lighten-4">
+            <!-- Basic Form -->
+            <v-toolbar dark color="primary darken-1">
+              <v-toolbar-title>
+                <strong>
+                  Enter after every hole:
+                </strong>
+              </v-toolbar-title>
+            </v-toolbar>
+              <v-card-text>
+                <v-select v-model="newHole.number" :items="number" label="Hole Number" type="number"/>
+                <v-text-field v-model="newHole.yards" label="Yards" type="number"/>
+                <v-select v-model="newHole.par" :items="par" label="Par" type="number"/>
+                <v-select v-model="newHole.tee" :items="tee" label="Tee (Black, Blue, White, Yellow, Red)"/>
+              </v-card-text>
+          </v-card>
 
-        <!-- Google Maps Component -->
-          <gmap-map
-            :center="myCoordinates"
-            :zoom="18"
-            map-type-id="satellite"
-            style="width: 500px; height: 500px"
-            ref="mapRef"
-          >
-            <gmap-marker
-              :key='index'
-              v-for= '(m, index) in markers'
-              :position = 'm.position'
-              :clickable = 'true'
-              :draggable = 'true'
-              @click = 'center = m.position'
-            ></gmap-marker>
+          <v-card class="elevation-14 pa-2" color="primary lighten-4">
+            <v-toolbar dark color="primary darken-1">
+              <v-toolbar-title>
+                <strong>
+                  Map: (Centers around you)
+                </strong>
+              </v-toolbar-title>
+            </v-toolbar>
+            <!-- Google Maps Component -->
+              <gmap-map
+                :center="myCoordinates"
+                :zoom="18"
+                map-type-id="satellite"
+                style="width: 335px; height: 812px"
+                ref="mapRef"
+                align
+                justify-center
+              >
+                <gmap-marker
+                  :key='index'
+                  v-for= '(m, index) in markers'
+                  :position = 'm.position'
+                  :clickable = 'true'
+                  :draggable = 'true'
+                  @click = 'center = m.position'
+                ></gmap-marker>
 
-            <gmap-polyline :paths="hole.shots.map(h => h.position)"></gmap-polyline>
-          </gmap-map>
+                <gmap-polyline :paths="hole.shots.map(h => h.position)"></gmap-polyline>
+              </gmap-map>
 
-        <v-row
-        align="center"
-        justify="space-around">
-          <v-btn large color="green" @click="createNewHole" class="pa-8">Tee Off</v-btn>
-          <v-btn large color="secondary" @click="Shot"  class="pa-8">Shot</v-btn>
-          <v-btn large color="yellow" @click="Holed"  class="pa-8">Holed</v-btn>
-          <v-btn large color="red" @click="finishRound"  class="pa-8">Finish Round</v-btn>
-          <v-select v-model="newShot.club" :items="clubs" label="Pick a club"/>
-        </v-row>
-        {{ newShot.position }}
-      </v-card>
+            <v-row
+            align="center"
+            justify="space-around">
+              <v-btn large color="green" @click="createNewHole" class="pa-8">Tee Off</v-btn>
+              <v-btn large color="secondary" @click="Shot"  class="pa-8">Shot</v-btn>
+              <v-btn large color="yellow" @click="Holed"  class="pa-8">Holed</v-btn>
+              <v-btn large color="red" @click="finishRound"  class="pa-8">Finish Round</v-btn>
+              <v-card-text>
+                <v-select v-model="newShot.club" :items="clubs" label="Pick a club"/>
+              </v-card-text>
+            </v-row>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </div>
 </template>
 

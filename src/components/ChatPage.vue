@@ -20,19 +20,6 @@
                   <strong>{{ message.user }} </strong>
                   {{ message.message}}
                 </v-list-item>
-<<<<<<< HEAD
-            </v-list>
-        </v-card-text>
-        <v-card-actions>
-            <v-text-field
-                v-model="msg"
-                label="Message"
-                @keydown.enter="sendMessage"
-            />
-            <v-btn
-              @click="sendMessage"
-            />
-=======
                 </v-list>
             </v-card-text>
           <v-card-actions>
@@ -54,7 +41,6 @@
           <!-- <v-btn
             @click="sendMessage"
           /> -->
->>>>>>> 5913b76eccd7e833f001c704839436867efedcb2
 
           </v-card-actions>
           </v-card>
@@ -76,9 +62,6 @@ export default {
     api,
     messages: [],
     msg: '',
-<<<<<<< HEAD
-    user: ''
-=======
     user: 'anthony',
     marker: true,
     iconIndex: 0,
@@ -93,7 +76,6 @@ export default {
       'mdi-emoticon-sad',
       'mdi-emoticon-tongue'
     ]
->>>>>>> 5913b76eccd7e833f001c704839436867efedcb2
   }),
   computed: {
     icon () {
@@ -128,7 +110,6 @@ export default {
   methods: {
     sendMessage () {
       this.api.service('messages').create({ message: this.msg, user: this.user })
-<<<<<<< HEAD
     },
     ...mapState({
       users: state => state.users
@@ -136,42 +117,6 @@ export default {
   },
   created () {
     this.$store.dispatch('GET_USER')
-=======
-      this.resetIcon()
-      this.clearMessage()
-    },
-    toggleMarker () {
-      this.marker = !this.marker
-    },
-    clearMessage () {
-      // this.message = ''
-    },
-    resetIcon () {
-      this.iconIndex = 0
-    },
-    changeIcon () {
-      this.iconIndex === this.icons.length - 1
-        ? this.iconIndex = 0
-        : this.iconIndex++
-    },
-    onScroll (e) {
-      this.top = e.target.scrollTop
-      if (e.target.scrollTop === 0) {
-        const list = this.$refs.messages.$el
-        const height = list.scrollHeight
-        this.skip += 10
-        // console.log(this.skip, this.retrieved)
-        if (this.retrieved < this.total) {
-          this.api.service('messages').find({ query: { $limit: 10, $sort: { createdAt: -1 }, $skip: this.skip } }).then(res => {
-            // console.log(res)
-            list.scrollTop = height
-            this.retrieved += res.data.length
-            this.messages = [...res.data, ...this.messages]
-          })
-        }
-      }
-    }
->>>>>>> 5913b76eccd7e833f001c704839436867efedcb2
   }
 }
 </script>
