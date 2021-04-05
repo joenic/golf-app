@@ -37,6 +37,7 @@
             @click:append-outer="sendMessage"
             @click:prepend="changeIcon"
             @click:clear="clearMessage"
+            @keydown.enter="sendMessage"
           />
           <!-- <v-btn
             @click="sendMessage"
@@ -116,7 +117,7 @@ export default {
       this.marker = !this.marker
     },
     clearMessage () {
-      // this.message = ''
+      this.message = ''
     },
     resetIcon () {
       this.iconIndex = 0
