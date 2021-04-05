@@ -118,7 +118,7 @@ export default {
       this.marker = !this.marker
     },
     clearMessage () {
-      this.messages = ''
+      this.msg = ''
     },
     resetIcon () {
       this.iconIndex = 0
