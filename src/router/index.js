@@ -6,6 +6,8 @@ import HolePage from '@/components/HolePage'
 import ChatPage from '@/components/ChatPage'
 import Users from '@/components/Users'
 import Games from '@/components/GamesPage'
+import Create from '@/components/CreateUser'
+import Game from '@/components/GamePage'
 
 Vue.use(Router)
 
@@ -16,6 +18,16 @@ export default new Router({
       path: '/',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/game',
+      name: 'Game',
+      component: Game
+    },
+    {
+      path: '/create',
+      name: 'Create',
+      component: Create
     },
     {
       path: '/games',

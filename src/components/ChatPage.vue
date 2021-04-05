@@ -52,6 +52,7 @@
 </template>
 
 <script>
+// import { mapState } from 'vuex'
 import { api } from '@/services/messages'
 export default {
   name: 'ChatPage',
@@ -110,8 +111,6 @@ export default {
   methods: {
     sendMessage () {
       this.api.service('messages').create({ message: this.msg, user: this.user })
-      this.resetIcon()
-      this.clearMessage()
     },
     toggleMarker () {
       this.marker = !this.marker

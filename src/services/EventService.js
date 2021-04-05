@@ -5,23 +5,25 @@ const apiClient = restapi.service('users')
 
 export default {
   // this is a get statment that pulls from the database
-  getUser (name) {
+  getUser (username, password) {
     return apiClient
-      .find(name)
+      .find({ username, password })
   },
   // This post data to the api when function is called. I threw in a catch statement if an error occurs
-  postUser (name, password) {
+  postUser (username, password) {
     return apiClient
-      .create(name, password)
-      .catch((error) => {
-        console.log(error)
-      })
+      .create(username, password)
   },
-  postCourse (courseName) {
+  // postCourse (name) {
+  //   return apiClient
+  //     .patch(this.$store.state.user._id, { courseName: name })
+  // },
+  newHole (number, yards, par, tee) {
     return apiClient
-      .create(courseName)
-      .catch((error) => {
-        console.log(error)
-      })
+      .patch({ number, yards, par, tee })
+  },
+  newShot (position, time, club) {
+    return apiClient
+      .patch({ position, time, club })
   }
 }
