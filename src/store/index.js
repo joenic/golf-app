@@ -42,7 +42,11 @@ export default new Vuex.Store({
                 number: 0,
                 yards: 0,
                 par: 0,
-                tee: ''
+                tee: '',
+                pin: {
+                  lat: 0,
+                  lng: 0
+                }
               }
             ]
           }
@@ -146,7 +150,8 @@ export default new Vuex.Store({
   getters: {
     games: state => state.user.games,
     game: state => state.user.games.find(g => g._id === state.currentGame),
-    hole: (state, getters) => getters.game.holes.find(h => h._id === state.currentHole)
+    hole: (state, getters) => getters.game?.holes.find(h => h._id === state.currentHole) || { number: 1, tee: 'Blue', yards: 0, shots: [], par: 3, pin: { lat: 0, lng: 0 } },
+    shot: (state, getters) => getters.hole?.shots.find(s => s._id === state.currentShot) || { position: { lat: 0, lng: 0 }, club: 'Driver', time: new Date() }
     // hole: state => ({
     //   shots: [
     //     {

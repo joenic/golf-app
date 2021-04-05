@@ -14,10 +14,10 @@
               </v-toolbar-title>
             </v-toolbar>
               <v-card-text>
-                <v-select v-model="newHole.number" :items="number" label="Hole Number" type="number"/>
-                <v-text-field v-model="newHole.yards" label="Yards" type="number"/>
-                <v-select v-model="newHole.par" :items="par" label="Par" type="number"/>
-                <v-select v-model="newHole.tee" :items="tee" label="Tee (Black, Blue, White, Yellow, Red)"/>
+                <v-select v-model="hole.number" :items="number" label="Hole Number" type="number"/>
+                <v-text-field v-model="hole.yards" label="Yards" type="number"/>
+                <v-select v-model="hole.par" :items="pars" label="Par" type="number"/>
+                <v-select v-model="hole.tee" :items="tee" label="Tee (Black, Blue, White, Yellow, Red)"/>
               </v-card-text>
           </v-card>
 
@@ -41,14 +41,14 @@
               >
                 <gmap-marker
                   :key='index'
-                  v-for= '(m, index) in markers'
-                  :position = 'm.position'
+                  v-for= '(shot, index) in hole.shots'
+                  :position = 'shot.position'
                   :clickable = 'true'
                   :draggable = 'true'
-                  @click = 'center = m.position'
+                  @click = 'center = shot.position'
                 ></gmap-marker>
 
-                <gmap-polyline :paths="hole.shots.map(h => h.position)"></gmap-polyline>
+                <gmap-polyline :path="polyline"></gmap-polyline>
               </gmap-map>
 
             <v-row
@@ -59,7 +59,7 @@
               <v-btn large color="yellow" @click="Holed"  class="pa-8">Holed</v-btn>
               <v-btn large color="red" @click="finishRound"  class="pa-8">Finish Round</v-btn>
               <v-card-text>
-                <v-select v-model="newShot.club" :items="clubs" label="Pick a club"/>
+                <v-select v-model="shot.club" :items="clubs" label="Pick a club"/>
               </v-card-text>
             </v-row>
           </v-card>
@@ -75,28 +75,14 @@ import { restapi } from '@/services/messages.js'
 export default {
   data () {
     return {
-      clubs: ['Driver', '3-Wood', '3 Iron', '4 Iron', '5 Iron', '6 Iron', '7 Iron', '8 Iron', '9 Iron', 'Pitching Wedge', 'Gap Wedge', 'Lob Wedge'],
+      clubs: ['Driver', '3-Wood', '3 Iron', '4 Iron', '5 Iron', '6 Iron', '7 Iron', '8 Iron', '9 Iron', 'Pitching Wedge', 'Gap Wedge', 'Lob Wedge', 'Putter'],
       number: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
       tee: ['Black', 'Blue', 'White', 'Yellow', 'Red'],
-      par: [3, 4, 5],
+      pars: [3, 4, 5],
       map: null,
-      markers: [],
-      paths: [],
-      myCoordinates: {},
-      newHole: {
-        shots: [],
-        number: 1,
-        yards: 0,
-        par: 3,
-        tee: 'Blue'
-      },
-      newShot: {
-        time: new Date(),
-        position: {
-          lat: 0,
-          lng: 0
-        },
-        club: ''
+      myCoordinates: {
+        lat: 0,
+        lng: 0
       }
     }
   },
@@ -113,68 +99,45 @@ export default {
   // },
   methods: {
     createNewHole () {
-      this.paths.push({
-        position: {
-          lat: this.myCoordinates.lat,
-          lng: this.myCoordinates.lng
-        }
-      })
-      this.markers.push({
-        position: {
-          lat: this.myCoordinates.lat,
-          lng: this.myCoordinates.lng
-        }
-      })
-      const { games, _id } = this.$store.state.user
-      // const newHole = {
-      //   shots: [
-      //     {
-      //       time: 0,
-      //       position: {
-      //         lat: 0,
-      //         lng: 0
-      //       },
-      //       club: ''
-      //     }
-      //   ],
-      //   number: 1,
-      //   yards: 0,
-      //   par: 3,
-      //   tee: 'Black'
-      // }
-      this.game.holes.push(this.newHole)
+      const { currentGame, user: { games, _id } } = this.$store.state
+      const newHole = {
+        shots: [
+          {
+            time: new Date(),
+            position: {
+              lat: this.myCoordinates.lat,
+              lng: this.myCoordinates.lng
+            },
+            club: 'Driver'
+          }
+        ],
+        number: this.game.holes.length + 1,
+        yards: this.yards,
+        par: this.hole.par,
+        tee: this.hole.tee || 'Blue'
+      }
+      this.game.holes.push(newHole)
       restapi.service('users').patch(_id, { games }).then(user => {
         this.$store.dispatch('UPDATE_USER', user)
-        const currentGame = user.games[user.games.length - 1]._id
-        const currentHole = user.games.find(g => g._id === currentGame).holes[0]._id
-        // this.$store.dispatch('UPDATE_CURRENT_GAME', currentGame)
-        this.$store.dispatch('UPDATE_CURRENT_HOLE', currentHole)
+        const game = user.games.find(g => g._id === currentGame)
+        const currentHole = game.holes[game.holes.length - 1]
+        const currentShot = currentHole.shots[0]
+        this.$store.dispatch('UPDATE_CURRENT_HOLE', currentHole._id)
+        this.$store.dispatch('UPDATE_CURRENT_SHOT', currentShot._id)
       })
     },
     Shot () {
-      this.markers.push({
-        position: {
-          lat: this.myCoordinates.lat,
-          lng: this.myCoordinates.lng
-        }
-      })
-      this.paths.push({
-        position: {
-          lat: this.myCoordinates.lat,
-          lng: this.myCoordinates.lng
-        }
-      })
       const { games, _id } = this.$store.state.user
-      // const newShot = {
-      //   time: 0,
-      //   position: {
-      //     lat: 0,
-      //     lng: 0
-      //   },
-      //   club: ''
-      // }
-      this.hole.shots.push(this.newShot)
-      console.log(games, this.hole)
+      const newShot = {
+        time: new Date(),
+        position: {
+          lat: this.myCoordinates.lat,
+          lng: this.myCoordinates.lng
+        },
+        club: ''
+      }
+      this.hole.shots.push(newShot)
+      // console.log(games, this.hole)
       restapi.service('users').patch(_id, { games }).then(user => {
         this.$store.dispatch('UPDATE_USER', user)
         const currentGame = user.games[user.games.length - 1]
@@ -186,11 +149,16 @@ export default {
       })
     },
     Holed () {
-      this.paths = []
-      this.markers = []
-      this.hole = this.newHole()
+      const { games, _id } = this.$store.state.user
+      this.hole.pin.lat = this.myCoordinates.lat
+      this.hole.pin.lng = this.myCoordinates.lng
+      restapi.service('users').patch(_id, { games }).then(user => {
+        this.$store.dispatch('UPDATE_USER', user)
+      })
     },
+
     finishRound () {
+      this.$router.push('/scorecard')
     }
   },
   created () {
@@ -200,15 +168,36 @@ export default {
     })
       .then(coordinates => {
         this.myCoordinates = coordinates
-        this.newShot.position.lat = coordinates.lat
-        this.newShot.position.lng = coordinates.lng
       })
       .catch(error => alert(error))
   },
   mounted () {
     this.$refs.mapRef.$mapPromise.then(map => { this.map = map })
   },
+  watch: {
+    game: {
+      deep: true,
+      immediate: true,
+      handler (newGame) {
+        // console.log(newGame)
+      }
+    },
+    hole: {
+      deep: true,
+      immediate: true,
+      handler (newHole) {
+        // console.log(newHole)
+      }
+    }
+  },
   computed: {
+    polyline () {
+      const paths = this.hole.shots.map(h => h.position)
+      if (this.hole.pin && this.hole.pin.lat !== 0) {
+        paths.push(this.hole.pin)
+      }
+      return paths
+    },
     mapCoordinates () {
       if (!this.map) {
         return {
@@ -224,7 +213,8 @@ export default {
     ...mapGetters({
       // create a getter to find the current game and current hole
       hole: 'hole',
-      game: 'game'
+      game: 'game',
+      shot: 'shot'
     })
   }
 }

@@ -42,7 +42,6 @@
 </template>
 
 <script>
-// eslint-disable-next-line no-unused-vars
 import { format } from 'date-fns'
 import { restapi } from '@/services/messages.js'
 import { mapGetters } from 'vuex'
@@ -84,7 +83,11 @@ export default {
             number: 1,
             yards: 0,
             par: 3,
-            tee: 'Blue'
+            tee: 'Blue',
+            pin: {
+              lat: 0,
+              lng: 0
+            }
           }
         ]
       }

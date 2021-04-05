@@ -3,78 +3,23 @@
     class="mx-auto"
     max-width="500"
   >
-    <v-data-table
-      :headers="headers"
-      :items="Hole"
-      class="elevation-1"
-    >
-      <template v-slot:item.FH= "{ item }">
-        <v-simple-checkbox
-          v-model="item.FH"
-        ></v-simple-checkbox>
-      </template>
-
-      <template v-slot:item.GIR= "{ item }">
-        <v-simple-checkbox
-          v-model="item.GIR"
-        ></v-simple-checkbox>
-      </template>
-
-      <template v-slot:item.Score= "props">
-        <v-edit-dialog
-          :return-value.sync="props.item.Score"
-          large
-          persistent
-          @save="save"
-          @cancel="cancel"
-          @open="open"
-          @close="close"
-        >
-          <div>{{ props.item.Score }}</div>
-          <template v-slot:input>
-            <div class="mt-4 title">
-              Enter Score
-            </div>
-            <v-text-field
-              v-model="props.item.Score"
-              :rules="[max25chars]"
-              label="Edit"
-              single-line
-              counter
-              autofocus
-            ></v-text-field>
-          </template>
-        </v-edit-dialog>
-      </template>
-
-      <template v-slot:item.Putt="props">
-        <v-edit-dialog
-          :return-value.sync="props.item.Putt"
-          large
-          persistent
-          @save="save"
-          @cancel="cancel"
-          @open="open"
-          @close="close"
-        >
-          <div>{{ props.item.Putt }}</div>
-          <template v-slot:input>
-            <div class="mt-4 title">
-              Enter Putts
-            </div>
-            <v-text-field
-              v-model="props.item.Putt"
-              :rules="[max25chars]"
-              label="Edit"
-              single-line
-              counter
-              autofocus
-            ></v-text-field>
-          </template>
-        </v-edit-dialog>
-      </template>
-
-    </v-data-table>
+    <v-toolbar dark color="primary darken-1">
+              <v-toolbar-title>
+                <strong>Course Name: </strong>
+                {{ game.courseName }}
+                <v-spacer />
+                <strong>Tee Time: </strong>
+                {{ format(new Date(game.teeTime), "d MMM, y 'at' h:mm a") }}
+              </v-toolbar-title>
+            </v-toolbar>
+    <template>
+      <v-data-table
+        :headers="headers"
+        :items="Hole"
+        :items-per-page="5"
+        class="elevation-1"
+      ></v-data-table>
+    </template>
 
     <v-snackbar
       v-model="snack"
@@ -97,7 +42,7 @@
 </template>
 
 <script>
-
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -114,19 +59,13 @@ export default {
           value: 'name'
         },
         { text: 'Par', value: 'par' },
-        { text: 'Score', value: 'shot' },
-        { text: 'Putts', value: 'putt' },
-        { text: 'Green in Reg', value: 'GIR' },
-        { text: 'Fairway Hit', value: 'FH' }
+        { text: 'Score', value: 'shot' }
       ],
       Hole: [
         {
-          name: '',
+          name: 'Hole 1',
           par: 0,
-          shot: 0,
-          putt: 0,
-          GIR: false,
-          FH: false
+          shot: this.$store.getters.hole1shots
         }
       ]
     }
@@ -150,10 +89,9 @@ export default {
     close () {
       console.log('Dialog closed')
     }
-  }
+  },
+  computed:
+    mapGetters(['game'])
 }
+
 </script>
-
-<style scoped>
-
-</style>
