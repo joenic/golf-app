@@ -3,18 +3,26 @@
     <v-card>
       <v-card-title>User Login</v-card-title>
         <v-form>
-          <v-text-field v-model="user.name" placeholder="First Name" class="form-control pa-2" type="text" prepend-inner-icon="mdi-account-circle"></v-text-field>
-          <v-text-field v-model="user.password" placeholder="Password" class="form-control pa-2" type="text" prepend-inner-icon="mdi-lock"></v-text-field>
-          <v-text-field v-model="course.courseName" placeholder="Course Name" class="form-control pa-2" type="text" prepend-inner-icon="mdi-golf-tee"></v-text-field>
+          <v-text-field v-model="username" placeholder="User Name" class="form-control pa-2" type="text" prepend-inner-icon="mdi-account-circle"></v-text-field>
+          <v-text-field
+            prepend-inner-icon="mdi-lock"
+            :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
+            :rules="[rules.required]"
+            :type="show3 ? 'text' : 'password'"
+            name="input-10-2"
+            label="Password"
+            hint="At least 8 characters"
+            class="input-group--focused pa-2"
+            @click:append="show3 = !show3"
+          ></v-text-field>
 
           <router-link to="/">
             <v-btn
               large
-              color="primary"
+              color="green"
               block
               type="submit"
-              @click="NEW_USER"
-              >Submit</v-btn>
+              >Login</v-btn>
           </router-link>
         </v-form>
     </v-card>
@@ -22,32 +30,42 @@
 </template>
 
 <script>
+import { restapi } from '@/services/messages'
 export default {
   // This is the local data for the component. The user key is calling a method newUser
   data () {
     return {
-      user: this.newUser(),
-      course: this.newCourse()
+      show1: false,
+      show2: true,
+      show3: false,
+      show4: false,
+      username: '',
+      password: '',
+      rules: {
+        required: value => !!value || 'Required.'
+        // emailMatch: () => ('The email and password you entered don\'t match')
+      }
     }
   },
-  methods: {
-    // NEW_USER method dispatches the local user data to the VUEX store that can then be pushed to the array and then further to the api end point
-    NEW_USER () {
-      this.$store.dispatch('NEW_USER', this.user)
-      this.$store.dispatch('NEW_COURSE', this.course)
-    },
-    // newUser returns empty strings that will be filled by the inputs in the template above.
-    newUser () {
-      return {
-        name: '',
-        password: ''
+  mounted () {
+    const { username, password } = this
+    restapi.service('users').find({ username, password }).then(res => {
+      const users = res.data[0]
+      if (users.length === 0) {
+        // no users found redirect to create account page
+        this.$router.push({
+          path: 'create'
+        })
+      } else if (users.length > 1) {
+        // This should never happen username and password combo shouldn't share with more than one user
+      } else {
+        // Set user in the state then route then to the games page.
+        this.$store.dispatch('GET_USER')
+        this.$router.push({
+          path: 'games'
+        })
       }
-    },
-    newCourse () {
-      return {
-        courseName: ''
-      }
-    }
+    })
   }
 }
 </script>

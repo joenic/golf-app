@@ -13,6 +13,7 @@
             <v-text-field
                 v-model="msg"
                 label="Message"
+                @keydown.enter="sendMessage"
             />
             <v-btn
               @click="sendMessage"
@@ -23,6 +24,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { api } from '@/services/messages'
 export default {
   name: 'ChatPage',
@@ -30,7 +32,7 @@ export default {
     api,
     messages: [],
     msg: '',
-    user: 'anthony'
+    user: ''
   }),
   mounted () {
     // this.user = this.$store.state.user.name
@@ -42,7 +44,13 @@ export default {
   methods: {
     sendMessage () {
       this.api.service('messages').create({ message: this.msg, user: this.user })
-    }
+    },
+    ...mapState({
+      users: state => state.users
+    })
+  },
+  created () {
+    this.$store.dispatch('GET_USER')
   }
 }
 </script>

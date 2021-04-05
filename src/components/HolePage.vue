@@ -6,11 +6,10 @@
         <!-- Basic Form -->
         <div>
           <v-form>
-            <!-- <h1> {{ user.username }} </h1> -->
-            <v-text-field v-model="hole.number" placeholder="Hole Number" type="number"/>
-            <v-text-field v-model="hole.yards" placeholder="Yards" type="number"/>
-            <v-text-field v-model="hole.par" placeholder="Par" type="number"/>
-            <v-text-field v-model="hole.tee" placeholder="Tee (Black, Blue, White, Yellow, Red)"/>
+            <v-select v-model="newHole.number" :items="number" label="Hole Number" type="number"/>
+            <v-text-field v-model="newHole.yards" label="Yards" type="number"/>
+            <v-select v-model="newHole.par" :items="par" label="Par" type="number"/>
+            <v-select v-model="newHole.tee" :items="tee" label="Tee (Black, Blue, White, Yellow, Red)"/>
           </v-form>
         </div>
 
@@ -31,37 +30,52 @@
               @click = 'center = m.position'
             ></gmap-marker>
 
-            <gmap-polygon :paths="hole.shots.map(h => h.position)"></gmap-polygon>
+            <gmap-polyline :paths="hole.shots.map(h => h.position)"></gmap-polyline>
           </gmap-map>
 
         <v-row
         align="center"
         justify="space-around">
           <v-btn large color="green" @click="createNewHole" class="pa-8">Tee Off</v-btn>
-          <v-btn large color="secondary" @click="drawDirection"  class="pa-8">Shot</v-btn>
-          <v-btn large color="yellow" @click="clearMap"  class="pa-8">Holed</v-btn>
+          <v-btn large color="secondary" @click="Shot"  class="pa-8">Shot</v-btn>
+          <v-btn large color="yellow" @click="Holed"  class="pa-8">Holed</v-btn>
           <v-btn large color="red" @click="finishRound"  class="pa-8">Finish Round</v-btn>
+          <v-select v-model="newShot.club" :items="clubs" label="Pick a club"/>
         </v-row>
-        <!-- Display's data from Game -->
-        <!-- <p> Shot: {{shot}} </p>
-        <p> Hole: {{theHole}} </p>
-        <p> Game: {{game}} </p> -->
+        {{ newShot.position }}
       </v-card>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-// const test = { lat: 38.42345466879392, lng: -78.87565709341992 }
-// const test2 = { lat: 38.4242274, lng: -78.872773 }
-
+import { restapi } from '@/services/messages.js'
 export default {
   data () {
     return {
+      clubs: ['Driver', '3-Wood', '3 Iron', '4 Iron', '5 Iron', '6 Iron', '7 Iron', '8 Iron', '9 Iron', 'Pitching Wedge', 'Gap Wedge', 'Lob Wedge'],
+      number: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+      tee: ['Black', 'Blue', 'White', 'Yellow', 'Red'],
+      par: [3, 4, 5],
       map: null,
       markers: [],
       paths: [],
-      myCoordinates: {}
+      myCoordinates: {},
+      newHole: {
+        shots: [],
+        number: 1,
+        yards: 0,
+        par: 3,
+        tee: 'Blue'
+      },
+      newShot: {
+        time: new Date(),
+        position: {
+          lat: 0,
+          lng: 0
+        },
+        club: ''
+      }
     }
   },
   // watch: {
@@ -77,11 +91,6 @@ export default {
   // },
   methods: {
     createNewHole () {
-      const position = {
-        lat: this.myCoordinates.lat,
-        lng: this.myCoordinates.lng
-      }
-      this.theHole.shots.push({ time: new Date(), position, club: '' })
       this.paths.push({
         position: {
           lat: this.myCoordinates.lat,
@@ -94,8 +103,33 @@ export default {
           lng: this.myCoordinates.lng
         }
       })
+      const { games, _id } = this.$store.state.user
+      // const newHole = {
+      //   shots: [
+      //     {
+      //       time: 0,
+      //       position: {
+      //         lat: 0,
+      //         lng: 0
+      //       },
+      //       club: ''
+      //     }
+      //   ],
+      //   number: 1,
+      //   yards: 0,
+      //   par: 3,
+      //   tee: 'Black'
+      // }
+      this.game.holes.push(this.newHole)
+      restapi.service('users').patch(_id, { games }).then(user => {
+        this.$store.dispatch('UPDATE_USER', user)
+        const currentGame = user.games[user.games.length - 1]._id
+        const currentHole = user.games.find(g => g._id === currentGame).holes[0]._id
+        // this.$store.dispatch('UPDATE_CURRENT_GAME', currentGame)
+        this.$store.dispatch('UPDATE_CURRENT_HOLE', currentHole)
+      })
     },
-    drawDirection () {
+    Shot () {
       this.markers.push({
         position: {
           lat: this.myCoordinates.lat,
@@ -108,24 +142,44 @@ export default {
           lng: this.myCoordinates.lng
         }
       })
+      const { games, _id } = this.$store.state.user
+      // const newShot = {
+      //   time: 0,
+      //   position: {
+      //     lat: 0,
+      //     lng: 0
+      //   },
+      //   club: ''
+      // }
+      this.hole.shots.push(this.newShot)
+      console.log(games, this.hole)
+      restapi.service('users').patch(_id, { games }).then(user => {
+        this.$store.dispatch('UPDATE_USER', user)
+        const currentGame = user.games[user.games.length - 1]
+        const currentHole = currentGame.holes[currentGame.holes.length - 1]
+        const currentShot = currentHole.shots[currentHole.shots.length - 1]
+        this.$store.dispatch('UPDATE_CURRENT_GAME', currentGame._id)
+        this.$store.dispatch('UPDATE_CURRENT_HOLE', currentHole._id)
+        this.$store.dispatch('UPDATE_CURRENT_SHOT', currentShot._id)
+      })
     },
-    clearMap () {
+    Holed () {
       this.paths = []
       this.markers = []
-      this.shot = 0
+      this.hole = this.newHole()
     },
     finishRound () {
-      this.game++
     }
   },
   created () {
-    this.$store.dispatch('GET_USER')
     // get user's coords
-    this.$watchLocation({
+    this.$getLocation({
       enableHighAccuracy: true
     })
       .then(coordinates => {
         this.myCoordinates = coordinates
+        this.newShot.position.lat = coordinates.lat
+        this.newShot.position.lng = coordinates.lng
       })
       .catch(error => alert(error))
   },
@@ -147,7 +201,8 @@ export default {
     },
     ...mapGetters({
       // create a getter to find the current game and current hole
-      hole: 'hole'
+      hole: 'hole',
+      game: 'game'
     })
   }
 }

@@ -1,12 +1,12 @@
 <template>
     <v-card>
-        <v-card-title> List of USERS: {{ users.name }} </v-card-title>
+        <v-card-title> List of USERS:</v-card-title>
+        <h1> {{ $store.state.user.username }} </h1>
         <v-card-text>
             <v-list>
                 <v-list-item v-for="user in users" :key="user">
-                    {{ user.name }}
+                    {{ user.username }}
                     {{ user.password }}
-                    {{ user.games }}
                 </v-list-item>
             </v-list>
         </v-card-text>
@@ -19,9 +19,7 @@ export default {
   created () {
     this.$store.dispatch('GET_USER')
   },
-  computed: mapState({
-    users: state => state.users
-  }),
+  computed: mapState(['users']),
   watch: {
     users: {
       deep: true,

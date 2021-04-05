@@ -2,12 +2,13 @@
   <v-app id="inspire">
     <v-navigation-drawer
       v-model="drawer"
-      v-if="['Login'].indexOf($route.name) === -1"
+      dark
+      v-if="['Login','Create'].indexOf($route.name) === -1"
       app>
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="title">
-            Welcome {{ user.username }}
+            Welcome {{ $store.state.user.username }}
           </v-list-item-title>
           <v-list-item-subtitle>
             Enjoy a game with your friends
@@ -53,7 +54,7 @@
 
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <!-- <v-app-bar-title>SubPar</v-app-bar-title> -->
+      <v-toolbar-title>SubPar</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -68,8 +69,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
   data: () => ({
     drawer: null,
@@ -82,11 +81,9 @@ export default {
       { title: 'Chat', icon: 'mdi-chat', to: '/chat' }
     ]
   }),
-  computed: mapState({
-    user: 'user'
-  }),
   routes: [
-    { path: '/' }
+    { path: '/' },
+    { path: '/create' }
   ]
 }
 </script>
