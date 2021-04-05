@@ -37,6 +37,7 @@
             @click:append-outer="sendMessage"
             @click:prepend="changeIcon"
             @click:clear="clearMessage"
+            @keydown.enter="sendMessage"
           />
           <!-- <v-btn
             @click="sendMessage"
@@ -51,7 +52,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+// import { mapState } from 'vuex'
 import { api } from '@/services/messages'
 export default {
   name: 'ChatPage',
@@ -110,13 +111,40 @@ export default {
   methods: {
     sendMessage () {
       this.api.service('messages').create({ message: this.msg, user: this.user })
+      this.resetIcon()
+      this.clearMessage()
     },
-    ...mapState({
-      users: state => state.users
-    })
-  },
-  created () {
-    this.$store.dispatch('GET_USER')
+    toggleMarker () {
+      this.marker = !this.marker
+    },
+    clearMessage () {
+      this.msg = ''
+    },
+    resetIcon () {
+      this.iconIndex = 0
+    },
+    changeIcon () {
+      this.iconIndex === this.icons.length - 1
+        ? this.iconIndex = 0
+        : this.iconIndex++
+    },
+    onScroll (e) {
+      this.top = e.target.scrollTop
+      if (e.target.scrollTop === 0) {
+        const list = this.$refs.messages.$el
+        const height = list.scrollHeight
+        this.skip += 10
+        // console.log(this.skip, this.retrieved)
+        if (this.retrieved < this.total) {
+          this.api.service('messages').find({ query: { $limit: 10, $sort: { createdAt: -1 }, $skip: this.skip } }).then(res => {
+            // console.log(res)
+            list.scrollTop = height
+            this.retrieved += res.data.length
+            this.messages = [...res.data, ...this.messages]
+          })
+        }
+      }
+    }
   }
 }
 </script>
