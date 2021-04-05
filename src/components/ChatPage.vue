@@ -111,12 +111,14 @@ export default {
   methods: {
     sendMessage () {
       this.api.service('messages').create({ message: this.msg, user: this.user })
+      this.resetIcon()
+      this.clearMessage()
     },
     toggleMarker () {
       this.marker = !this.marker
     },
     clearMessage () {
-      this.message = ''
+      this.messages = ''
     },
     resetIcon () {
       this.iconIndex = 0
