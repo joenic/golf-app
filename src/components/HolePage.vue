@@ -99,66 +99,80 @@ export default {
   // },
   methods: {
     createNewHole () {
-      const { currentGame, user: { games, _id } } = this.$store.state
-      const newHole = {
-        shots: [
-          {
-            time: new Date(),
-            position: {
-              lat: this.myCoordinates.lat,
-              lng: this.myCoordinates.lng
-            },
-            club: 'Driver'
-          }
-        ],
-        number: this.game.holes.length + 1,
-        yards: this.yards,
-        par: this.hole.par,
-        tee: this.hole.tee || 'Blue'
-      }
-      this.game.holes.push(newHole)
-      restapi.service('users').patch(_id, { games }).then(user => {
-        this.$store.dispatch('UPDATE_USER', user)
-        const game = user.games.find(g => g._id === currentGame)
-        const currentHole = game.holes[game.holes.length - 1]
-        const currentShot = currentHole.shots[0]
-        this.$store.dispatch('UPDATE_CURRENT_HOLE', currentHole._id)
-        this.$store.dispatch('UPDATE_CURRENT_SHOT', currentShot._id)
+      this.getGPS().then(()=> {
+        const { currentGame, user: { games, _id } } = this.$store.state
+        const newHole = {
+          shots: [
+            {
+              time: new Date(),
+              position: {
+                lat: this.myCoordinates.lat,
+                lng: this.myCoordinates.lng
+              },
+              club: 'Driver'
+            }
+          ],
+          number: this.game.holes.length + 1,
+          yards: this.yards,
+          par: this.hole.par,
+          tee: this.hole.tee || 'Blue'
+        }
+        this.game.holes.push(newHole)
+        restapi.service('users').patch(_id, { games }).then(user => {
+          this.$store.dispatch('UPDATE_USER', user)
+          const game = user.games.find(g => g._id === currentGame)
+          const currentHole = game.holes[game.holes.length - 1]
+          const currentShot = currentHole.shots[0]
+          this.$store.dispatch('UPDATE_CURRENT_HOLE', currentHole._id)
+          this.$store.dispatch('UPDATE_CURRENT_SHOT', currentShot._id)
+        })
       })
     },
     Shot () {
-      const { games, _id } = this.$store.state.user
-      const newShot = {
-        time: new Date(),
-        position: {
-          lat: this.myCoordinates.lat,
-          lng: this.myCoordinates.lng
-        },
-        club: ''
-      }
-      this.hole.shots.push(newShot)
-      // console.log(games, this.hole)
-      restapi.service('users').patch(_id, { games }).then(user => {
-        this.$store.dispatch('UPDATE_USER', user)
-        const currentGame = user.games[user.games.length - 1]
-        const currentHole = currentGame.holes[currentGame.holes.length - 1]
-        const currentShot = currentHole.shots[currentHole.shots.length - 1]
-        this.$store.dispatch('UPDATE_CURRENT_GAME', currentGame._id)
-        this.$store.dispatch('UPDATE_CURRENT_HOLE', currentHole._id)
-        this.$store.dispatch('UPDATE_CURRENT_SHOT', currentShot._id)
+      this.getGPS().then(() => {
+        const { games, _id } = this.$store.state.user
+        const newShot = {
+          time: new Date(),
+          position: {
+            lat: this.myCoordinates.lat,
+            lng: this.myCoordinates.lng
+          },
+          club: ''
+        }
+        this.hole.shots.push(newShot)
+        // console.log(games, this.hole)
+        restapi.service('users').patch(_id, { games }).then(user => {
+          this.$store.dispatch('UPDATE_USER', user)
+          const currentGame = user.games[user.games.length - 1]
+          const currentHole = currentGame.holes[currentGame.holes.length - 1]
+          const currentShot = currentHole.shots[currentHole.shots.length - 1]
+          this.$store.dispatch('UPDATE_CURRENT_GAME', currentGame._id)
+          this.$store.dispatch('UPDATE_CURRENT_HOLE', currentHole._id)
+          this.$store.dispatch('UPDATE_CURRENT_SHOT', currentShot._id)
+        })
       })
     },
     Holed () {
-      const { games, _id } = this.$store.state.user
-      this.hole.pin.lat = this.myCoordinates.lat
-      this.hole.pin.lng = this.myCoordinates.lng
-      restapi.service('users').patch(_id, { games }).then(user => {
-        this.$store.dispatch('UPDATE_USER', user)
+      this.getGPS().then(() => {
+        const { games, _id } = this.$store.state.user
+        this.hole.pin.lat = this.myCoordinates.lat
+        this.hole.pin.lng = this.myCoordinates.lng
+        restapi.service('users').patch(_id, { games }).then(user => {
+          this.$store.dispatch('UPDATE_USER', user)
+        })
       })
     },
-
     finishRound () {
       this.$router.push('/scorecard')
+    },
+    async getGPS () {
+      return this.$getLocation({
+        enableHighAccuracy: true
+      })
+        .then(coordinates => {
+          this.myCoordinates = coordinates
+        })
+        .catch(error => alert(error))
     }
   },
   created () {
