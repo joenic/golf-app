@@ -99,7 +99,7 @@ export default {
   // },
   methods: {
     createNewHole () {
-      this.getGPS().then(()=> {
+      this.getGPS().then(() => {
         const { currentGame, user: { games, _id } } = this.$store.state
         const newHole = {
           shots: [

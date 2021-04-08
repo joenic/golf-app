@@ -76,7 +76,7 @@ export default {
       { title: 'Sign Out', icon: 'mdi-view-dashboard', to: '/' },
       { title: 'My Games', icon: 'mdi-golf-tee', to: '/games' },
       { title: 'Start Game', icon: 'mdi-golf', to: '/hole' },
-      { title: 'Scorecard', icon: 'mdi-lead-pencil', to: '/scorecard' },
+      // { title: 'Scorecard', icon: 'mdi-lead-pencil', to: '/scorecard' },
       // { title: 'Leaderboard', icon: 'mdi-trophy', to: '' },
       { title: 'Chat', icon: 'mdi-chat', to: '/chat' }
     ]

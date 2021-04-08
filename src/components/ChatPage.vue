@@ -17,7 +17,7 @@
                 <v-list-item v-for="message in messages" :key="message._id"
                   v-scroll:#messages="onScroll"
                   >
-                  <strong>{{ message.user }} </strong>
+                  <strong>{{ $store.state.user.username }} </strong>
                   {{ message.message}}
                 </v-list-item>
                 </v-list>
@@ -63,7 +63,7 @@ export default {
     api,
     messages: [],
     msg: '',
-    user: 'anthony',
+    user: '',
     marker: true,
     iconIndex: 0,
     top: 0,
